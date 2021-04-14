@@ -14,4 +14,3 @@ RUN sudo yum install -y bash wget curl libGL zlib-devel bzip2-devel openssl-deve
 RUN groupadd -r noroot && useradd -r -g noroot noroot
 USER noroot
 RUN pip3 install pyclipper Shapely onnxruntime opencv_python numpy Pillow tornado pycorrector jieba pypinyin six
-RUN python3 backend/main.py
