@@ -1,7 +1,7 @@
 FROM centos:latest
 RUN groupadd -r noroot && useradd -r -g noroot noroot
 USER noroot
-RUN yum install -y bash wget curl libGL zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel  libffi-devel gcc make \
+RUN sudo yum install -y bash wget curl libGL zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel  libffi-devel gcc make \
 && wget https://www.python.org/ftp/python/3.7.9/Python-3.7.10.tgz \
 && tar -zxvf Python-3.7.10.tgz \
 && rm -rf Python-3.7.10.tgz \
