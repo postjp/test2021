@@ -19,4 +19,5 @@ RUN yum install -y bash wget curl libGL zlib-devel bzip2-devel openssl-devel ncu
 && mv tr.py -f backend/webInterface/tr_run.py \
 && mv m.py -f model.py  \
 && mv h.py -f backend/tools/get_host_ip.py  \
+&& mv imgx.py backend/tools/imgx.py
 
