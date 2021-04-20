@@ -13,12 +13,11 @@ RUN yum install -y bash wget curl libGL zlib-devel bzip2-devel openssl-devel ncu
 && ln -s /usr/local/bin/pip3 /usr/bin/pip3 \
 && pip3 install pyclipper Shapely onnxruntime opencv_python numpy Pillow tornado  jieba==0.39 pypinyin six pycorrector \
 && git clone https://github.com/DayBreak-u/chineseocr_lite.git \
+&& cd chineseocr_lite \
 && wget https://raw.githubusercontent.com/postjp/test2021/main/tr.py \
 && wget https://raw.githubusercontent.com/postjp/test2021/main/m.py \
 && wget https://raw.githubusercontent.com/postjp/test2021/main/h.py \
 && wget https://raw.githubusercontent.com/postjp/test2021/main/imgx.py \
-
-&& cd chineseocr_lite \
 && mv tr.py -f backend/webInterface/tr_run.py \
 && mv m.py -f model.py  \
 && mv h.py -f backend/tools/get_host_ip.py  \
