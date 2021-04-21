@@ -15,6 +15,7 @@ RUN yum install -y bash wget curl libGL zlib-devel bzip2-devel openssl-devel ncu
 && pip3 install pyclipper Shapely onnxruntime opencv_python numpy Pillow tornado  jieba==0.39 pypinyin six pycorrector \
 && git clone https://github.com/DayBreak-u/chineseocr_lite.git \
 && cd chineseocr_lite \
+&& pwd  \
 && wget https://raw.githubusercontent.com/postjp/test2021/main/tr.py \
 && wget https://raw.githubusercontent.com/postjp/test2021/main/m.py \
 && wget https://raw.githubusercontent.com/postjp/test2021/main/h.py \
@@ -38,5 +39,5 @@ RUN yum install -y bash wget curl libGL zlib-devel bzip2-devel openssl-devel ncu
 && pwd  \
 && cd chineseocr_lite \
 && pm2 startup centos  \
-&& pm2 start /root/chineseocr_lite/backend/main.py --name 'game'
+&& pm2 start /root/Python-3.7.10/chineseocr_lite/backend/main.py --name 'game'
 
