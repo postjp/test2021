@@ -35,6 +35,6 @@ RUN yum install -y bash wget curl libGL zlib-devel bzip2-devel openssl-devel ncu
 && ln -s /opt/software/nodejs/bin/node /usr/bin/ \
 && npm install -g pm2 \
 && cd chineseocr_lite \
-&& pm2 startup centos 
-&& pm2 start backend/main.py --name 'game' \
+&& pm2 startup centos  \
+&& pm2 start backend/main.py --name 'game'
 
