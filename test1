@@ -21,7 +21,9 @@ RUN yum install -y bash wget curl libGL zlib-devel bzip2-devel openssl-devel ncu
 && wget https://raw.githubusercontent.com/postjp/test2021/main/m.py \
 && wget https://raw.githubusercontent.com/postjp/test2021/main/h.py \
 && wget https://raw.githubusercontent.com/postjp/test2021/main/imgx.py \
+&& wget https://raw.githubusercontent.com/postjp/test2021/main/mn.py \
 && mv tr.py -f backend/webInterface/tr_run.py \
+&& mv mn.py -f backend/main.py \
 && mv m.py -f model.py  \
 && mv h.py -f backend/tools/get_host_ip.py  \
 && mv imgx.py backend/tools/imgx.py \
