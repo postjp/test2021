@@ -7,7 +7,7 @@ import base64
 from PIL import Image, ImageDraw,ImageFont
 from io import BytesIO
 import datetime
-import json,jmespath,hashlib
+import json,hashlib
 
 from backend.tools.np_encoder import NpEncoder
 from backend.tools import log
