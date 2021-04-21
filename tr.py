@@ -1,4 +1,4 @@
-import time
+import time,datetime
 from model import  OcrHandle
 import tornado.web
 import tornado.gen
@@ -7,7 +7,7 @@ import base64
 from PIL import Image, ImageDraw,ImageFont
 from io import BytesIO
 import datetime
-import json
+import json,jmespath,hashlib
 
 from backend.tools.np_encoder import NpEncoder
 from backend.tools import log
@@ -29,7 +29,13 @@ class TrRun(tornado.web.RequestHandler):
     '''
     使用 tr 的 run 方法
     '''
+
+    def md5(chunk):
         
+        hash_md5 = hashlib.md5()
+        hash_md5.update(chunk)
+        return hash_md5.hexdigest()
+
     def get(self):
         self.set_status(404)
         self.write("404 : Please use POST")
@@ -47,11 +53,54 @@ class TrRun(tornado.web.RequestHandler):
         global now_time
         global request_time
         urls = self.request.files.get('url', None)
+        
+        img_up = self.request.files.get('file', None)
+        img_b64 = self.get_argument('img', None)
+        somd5 = self.get_argument('somd5', None)
         compress_size = self.get_argument('compress', None)
-        imgfiles=imgx.urlget(urls)
+        
+        self.set_header('content-type', 'application/json')
+        up_image_type = None
+        if img_up is not None and len(img_up) > 0:
+            urls=['999']
+            img_up = img_up[0]
+            up_image_type = img_up.content_type
+            up_image_name = img_up.filename
+            t = time.time()
+            goxxoo=str(round(t * 1000000))+'_2333333333333_'
+            with open(goxxoo,'wb') as f:
+                f.write(img_up.body)
+                f.close()
+            if somd5 is not None:
+                somd52=md5(goxxoo)
+                if str(somd5) != str(somd52):
+                    somd5=somd52
+            imgfiles=imgx.urlget(urls,goxxoo,1)
+            
+        elif img_b64 is not None:
+            urls=['999']
+            raw_image = base64.b64decode(img_b64.encode('utf8'))
+            t = time.time()
+            goxxoo=str(round(t * 1000000))+'_2333333333333_'
+            with open(goxxoo,'wb') as f:
+                f.write(raw_image)
+                f.close()
+            if somd5 is not None:
+                somd52=md5(goxxoo)
+                if str(somd5) != str(somd52):
+                    somd5=somd52
+            imgfiles=imgx.urlget(urls,goxxoo,2)
+            
+        else:
+            imgfiles=imgx.urlget(urls,0,0)
+
+            
+        
+        
+        
         alltxt=''
         # 判断是上传的图片还是base64
-        self.set_header('content-type', 'application/json')
+
         for imgurl in imgfiles:
 
             up_image_type = None
@@ -154,5 +203,5 @@ class TrRun(tornado.web.RequestHandler):
             }
         logger.info(json.dumps(log_info, cls=NpEncoder))
         self.finish(json.dumps(
-            {'code': 200,'txt':alltxt},cls=NpEncoder))
+            {'code': 200,'txt':alltxt,'md5':somd5},cls=NpEncoder))
         return
