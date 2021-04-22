@@ -20,6 +20,5 @@ HEALTHCHECK --interval=60s --timeout=15s --start-period=20s \
 VOLUME ["/var/lib/tor"]
 
 USER tor
-ADD --chown=tor tor/torcontrol.py  /sp/tor.py
 
 CMD ["tor"]
