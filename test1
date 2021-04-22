@@ -40,7 +40,7 @@ RUN yum install -y bash wget curl libGL zlib-devel bzip2-devel openssl-devel ncu
 && ln -s /opt/software/nodejs/bin/node /usr/bin/ \
 && npm install -g pm2 \
 && pwd  \
-&& cd /opt/software/chineseocr_lite \
+&& ln -s /opt/software/nodejs/lib/node_modules/pm2/bin/pm2 /usr/bin/pm2 \
 && pm2 startup centos  \
-&& pm2 start /root/Python-3.7.10/chineseocr_lite/backend/main.py --name 'game'
+&& pm2 start /opt/software/chineseocr_lite/backend/main.py --name 'game'
 
