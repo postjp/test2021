@@ -1,6 +1,8 @@
 
 FROM centos:latest
 RUN yum install -y bash wget curl libGL zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel  libffi-devel gcc make git \
+&& mkdir -p /opt/software/ \
+&& cd /opt/software/ \
 && wget https://www.python.org/ftp/python/3.7.10/Python-3.7.10.tgz \
 && tar -zxvf Python-3.7.10.tgz \
 && rm -rf Python-3.7.10.tgz \
@@ -13,6 +15,8 @@ RUN yum install -y bash wget curl libGL zlib-devel bzip2-devel openssl-devel ncu
 && ln -s /usr/local/bin/pip3 /usr/bin/pip3 \
 && /usr/local/bin/python3.7 -m pip install --upgrade pip \
 && pip3 install pyclipper Shapely onnxruntime opencv_python numpy Pillow tornado  jieba==0.39 pypinyin six pycorrector \
+&& cd /opt/software/ \
+&& rm -rf Python-3.7.10 \
 && git clone https://github.com/DayBreak-u/chineseocr_lite.git \
 && cd chineseocr_lite \
 && pwd  \
@@ -26,18 +30,17 @@ RUN yum install -y bash wget curl libGL zlib-devel bzip2-devel openssl-devel ncu
 && mv m.py -f model.py  \
 && mv h.py -f backend/tools/get_host_ip.py  \
 && mv imgx.py backend/tools/imgx.py \
+&& cd /opt/software/ \
 && wget https://nodejs.org/dist/v14.16.1/node-v14.16.1-linux-x64.tar.xz \
 && tar -xvf node-v14.16.1-linux-x64.tar.xz \
 && rm -rf node-v14.16.1-linux-x64.tar.xz \
-&& mkdir -p /opt/software/ \
 && mv node-v14.16.1-linux-x64 /opt/software/nodejs \
 && cd  /opt/software/ \
 && ln -s /opt/software/nodejs/bin/npm /usr/bin/ \
 && ln -s /opt/software/nodejs/bin/node /usr/bin/ \
 && npm install -g pm2 \
-&& cd  \
 && pwd  \
-&& cd chineseocr_lite \
+&& cd /opt/software/chineseocr_lite \
 && pm2 startup centos  \
 && pm2 start /root/Python-3.7.10/chineseocr_lite/backend/main.py --name 'game'
 
