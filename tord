@@ -9,7 +9,7 @@ RUN echo "**** install Python ****" && \
     echo "**** install pip ****" && \
     python3 -m ensurepip && \
     rm -r /usr/lib/python*/ensurepip && \
-    pip3 install --no-cache --upgrade pip setuptools wheel && \
+    pip3 install --no-cache --upgrade pip setuptools wheel PySocks stem requests && \
     if [ ! -e /usr/bin/pip ]; then ln -s pip3 /usr/bin/pip ; fi  && \
     apk add --no-cache curl tor && \
     sed "1s/^/SocksPort 0.0.0.0:19150\nControlPort 19250\nHTTPTunnelPort 18051\nSocksPort 0.0.0.0:19151\nControlPort 19251\nSocksPort 0.0.0.0:19152\nControlPort 19252\nSocksPort 0.0.0.0:19153\nControlPort 19253\nSocksPort 0.0.0.0:19154\nControlPort 19254\n/" /etc/tor/torrc.sample > /etc/tor/torrc && \
