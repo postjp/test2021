@@ -3,8 +3,8 @@ from stem import Signal
 from stem.control import Controller
   
 def switch_proxy():
-  	with Controller.from_port(port=19151) as controller:
-      	controller.authenticate(password='WWb79c214a3368ab6dcd03')
+    with Controller.from_port(port=19151) as controller:
+  	    controller.authenticate(password='WWb79c214a3368ab6dcd03')
         controller.signal(Signal.NEWNYM)
   
 
