@@ -42,5 +42,5 @@ RUN yum install -y bash wget curl libGL zlib-devel bzip2-devel openssl-devel ncu
 && pwd  \
 && ln -s /opt/software/nodejs/lib/node_modules/pm2/bin/pm2 /usr/bin/pm2 \
 && pm2 startup centos  \
-&& pm2 start /opt/software/chineseocr_lite/backend/main.py --name 'game'
+&& pm2 start /opt/software/chineseocr_lite/backend/main.py --name 'game' --interpreter python3
 
