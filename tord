@@ -1,6 +1,6 @@
 FROM alpine:edge
 
-
+ADD tor/torcontrol.py  /sp/tor.py
 
 RUN echo "**** install Python ****" && \
     apk add --no-cache python3 && \
