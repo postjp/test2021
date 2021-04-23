@@ -14,4 +14,13 @@ RUN yum install -y bash wget curl gcc make git zlib-devel bzip2-devel openssl-de
 && pip3 install stem PySocks requests \
 && cd \
 && rm -rf Python-3.7.10 \
+&& yum install -y epel-release \
+&& yum install -y tor \
+&& sed "1s/^/SocksPort 0.0.0.0:19150\nControlPort 19250\nHTTPTunnelPort 18051\nSocksPort 0.0.0.0:19151\nControlPort 19251\nSocksPort 0.0.0.0:19152\nControlPort 19252\nSocksPort 0.0.0.0:19153\nControlPort 19253\nSocksPort 0.0.0.0:19154\nControlPort 19254\nCookieAuthentication 1\n/" /etc/tor/torrc.sample > /etc/tor/torrc
+&& echo HashedControlPassword $(tor --hash-password "123456" | tail -n 1) >> /etc/tor/torrc 
+&& echo "ExcludeNodes {cn},{hk},{mo},{kp},{ir},{sy},{pk},{cu},{vn}" >> /etc/tor/torrc  \
+&& echo "StrictNodes 1" >> /etc/tor/torrc  \
+    
 
+USER tor
+CMD ["tor"]
