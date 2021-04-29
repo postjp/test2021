@@ -47,25 +47,23 @@ class TrRun(tornado.web.RequestHandler):
         报错：
         400 没有请求参数
         '''
-        
         start_time = time.time()
         short_size = 960
         global now_time
         global request_time
-        urls = self.request.files.get('url', None)
-        
         img_up = self.request.files.get('file', None)
         img_b64 = self.get_argument('img', None)
         somd5 = self.get_argument('somd5', None)
         compress_size = self.get_argument('compress', None)
-        
+
+        # 判断是上传的图片还是base64
         self.set_header('content-type', 'application/json')
         up_image_type = None
         if img_up is not None and len(img_up) > 0:
-            urls=['999']
             img_up = img_up[0]
             up_image_type = img_up.content_type
             up_image_name = img_up.filename
+            
             t = time.time()
             goxxoo=str(round(t * 1000000))+'_2333333333333_'
             with open(goxxoo,'wb') as f:
@@ -78,40 +76,26 @@ class TrRun(tornado.web.RequestHandler):
             imgfiles=imgx.urlget(urls,goxxoo,1)
             
         elif img_b64 is not None:
-            urls=['999']
             raw_image = base64.b64decode(img_b64.encode('utf8'))
-            t = time.time()
-            goxxoo=str(round(t * 1000000))+'_2333333333333_'
-            with open(goxxoo,'wb') as f:
-                f.write(raw_image)
-                f.close()
-            if somd5 is not None:
-                somd52=md5(goxxoo)
-                if str(somd5) != str(somd52):
-                    somd5=somd52
-            imgfiles=imgx.urlget(urls,goxxoo,2)
-            
+            img = Image.open(BytesIO(raw_image))
         else:
-            imgfiles=imgx.urlget(urls,0,0)
+            self.set_status(400)
+            logger.error(json.dumps({'code': 400, 'msg': '没有传入参数'}, cls=NpEncoder))
+            self.finish(json.dumps({'code': 400, 'msg': '没有传入参数'}, cls=NpEncoder))
+            return
 
-            
-        
-        
         
         alltxt=''
-        # 判断是上传的图片还是base64
-
         for imgurl in imgfiles:
-
-            up_image_type = None
+            
             if len(imgfiles) > 0:
                 img = Image.open(imgurl)
             else:
                 self.set_status(400)
-                logger.error(json.dumps({'code': 400, 'msg': '没有传入参数'}, cls=NpEncoder))
-                self.finish(json.dumps({'code': 400, 'msg': '没有传入参数'}, cls=NpEncoder))
+                logger.error(json.dumps({'code': 401, 'msg': '分割失败'}, cls=NpEncoder))
+                self.finish(json.dumps({'code': 401, 'msg': '分割失败'}, cls=NpEncoder))
                 return
-
+            
             try:
                 if hasattr(img, '_getexif') and img._getexif() is not None:
                     orientation = 274
@@ -136,7 +120,7 @@ class TrRun(tornado.web.RequestHandler):
             if time_day != now_time:
                 now_time = time_day
                 request_time = {}
-
+            #img.save("../web_imgs/{}.jpg".format(time_now))
 
 
             '''
@@ -147,8 +131,14 @@ class TrRun(tornado.web.RequestHandler):
             '''
             res = []
             do_det = True
-
-
+            remote_ip_now = self.request.remote_ip
+            if remote_ip_now not in request_time :
+                request_time[remote_ip_now] = 1 
+            elif request_time[remote_ip_now] > max_post_time -1 and remote_ip_now not in white_ips  :
+                res.append("今天访问次数超过{}次！".format(max_post_time))
+                do_det = False
+            else:
+                request_time[remote_ip_now] += 1
 
             if compress_size is not None:
                 try:
@@ -189,6 +179,8 @@ class TrRun(tornado.web.RequestHandler):
                 for i, r in enumerate(res):
                     rect, txt, confidence = r
                     alltxt=alltxt+txt
+                    
+                    
 
             else:
                 output_buffer = BytesIO()
