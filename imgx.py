@@ -13,10 +13,15 @@ def urlget(urls,iofile,numone):
         
         filenameX=[]
         if numone !=0:
-                
-            SUFFIxx=str(imghdr.what(iofile)[0])
-            iofile=iofile.replace("_2333333333333_",SUFFIxx)
-            filenameX.extend(splitimg(iofile,500,1000))
+            ZZZ=imghdr.what(iofile)
+            if len(ZZZ)>0:
+                SUFFIxx="."
+                SUFFIxx=join(ZZZ)
+            else:
+                SUFFIxx=".gif"
+            
+            #iofile=iofile.replace("_2333333333333_",SUFFIxx)
+            filenameX.extend(splitimg(SUFFIxx,iofile,500,1000))
                 
         if  numone ==0:
             
@@ -57,7 +62,7 @@ def urlget(urls,iofile,numone):
             del e
             
             
-def splitimg(xxxx,heighss,quality,output=None):
+def splitimg(SUFFIxx,xxxx,heighss,quality,output=None):
     try:
       
         outputAll=[]
@@ -96,9 +101,9 @@ def splitimg(xxxx,heighss,quality,output=None):
 
             sub_image=image.crop((begin_x,begin_y,end_x,end_y))
 
-            output=ospath.join(file_dir,filename+str(count)+extname)
+            output=ospath.join(file_dir,filename+str(count)+SUFFIxx)
 
-            sub_image.save(output,quality)
+            sub_image.save(output,quality=quality)
             outputAll.append(output)
             count+=1
 
